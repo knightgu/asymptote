@@ -448,15 +448,18 @@ This variable must be modified only using the function 'asy-set-master-tex by M-
       (let*
           ((buffer-base-name (file-name-sans-extension (file-name-nondirectory buffer-file-name)))
            (asy-compile-command
-            (concat  asy-command-location asy-command
-                     (if (eq asy-compilation-buffer 'never)
-                         " " " -wait ")
-                     (asy-protect-file-name buffer-base-name)
-                     "; lyxadobe "
-                     (asy-protect-file-name (concat buffer-base-name ".pdf")))))
+            (concat asy-command-location asy-command
+                    (if (eq asy-compilation-buffer 'never)
+                        " " " -wait ")
+                    (asy-protect-file-name buffer-base-name)))
+           (generated-pdf-file (concat buffer-base-name ".pdf"))
+           (asy-pdf-update-view-command
+            (concat "lyxadobe " (asy-protect-file-name generated-pdf-file))))
         (if (buffer-modified-p) (save-buffer))
         (message "%s" asy-compile-command)
-        (asy-internal-compile asy-compile-command t t)))))
+        (asy-internal-compile asy-compile-command nil nil)
+        (if (file-exists-p generated-pdf-file)
+            (shell-command-to-string asy-pdf-update-view-command))))))
 
 (defun asy-error-message(&optional P)
   (let ((asy-last-error

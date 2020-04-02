@@ -454,7 +454,7 @@ This variable must be modified only using the function 'asy-set-master-tex by M-
                     (asy-protect-file-name buffer-base-name)))
            (generated-pdf-file (concat buffer-base-name ".pdf"))
            (asy-pdf-update-view-command
-            (concat "lyxacrobat " (asy-protect-file-name generated-pdf-file))))
+            (concat "lyxview " (asy-protect-file-name generated-pdf-file))))
         (if (buffer-modified-p) (save-buffer))
         (message "%s" asy-compile-command)
         (asy-internal-compile asy-compile-command nil nil)
